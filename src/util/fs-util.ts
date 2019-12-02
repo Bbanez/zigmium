@@ -92,16 +92,21 @@ export class FSUtil {
 
   public static async fileTree(p: string): Promise<FileTree[]> {
     const fileTree: FileTree[] = [];
-    const result = await util.promisify(fs.readdir)(p);
-    for (const i in result) {
-      if (result[i].indexOf('.') === -1) {
-        fileTree.push({
-          name: result[i],
-          children: await FSUtil.fileTree(path.join(p, result[i])),
-        });
-      } else {
-        fileTree.push({ name: result[i] });
+    try {
+      const result = await util.promisify(fs.readdir)(p);
+      for (const i in result) {
+        if (result[i].indexOf('.') === -1) {
+          fileTree.push({
+            name: result[i],
+            children: await FSUtil.fileTree(path.join(p, result[i])),
+          });
+        } else {
+          fileTree.push({ name: result[i] });
+        }
       }
+    } catch (error) {
+      // tslint:disable-next-line:no-console
+      console.log(`'${p}' does not exist.`);
     }
     return fileTree;
   }

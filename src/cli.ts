@@ -1,5 +1,4 @@
 import * as arg from 'arg';
-import * as path from 'path';
 
 const rootPath = 'zigmium';
 
@@ -9,11 +8,9 @@ function parseArgsIntoOptions(rawArgs) {
       '--dev': Boolean,
       '--serve': Boolean,
       '--build': Boolean,
-      '--init': Boolean,
       '-d': '--dev',
       '-s': '--serve',
       '-b': '--build',
-      '-i': '--init',
     },
     {
       argv: rawArgs.slice(2),
@@ -23,13 +20,12 @@ function parseArgsIntoOptions(rawArgs) {
     dev: args['--dev'] || false,
     serve: args['--serve'] || false,
     build: args['--build'] || false,
-    init: args['--init'] || false,
   };
 }
 
 export function cli(args) {
   const options = parseArgsIntoOptions(args);
-  process.env.PROJECT_ROOT = path.join(__dirname, '../..');
+  process.env.PROJECT_ROOT = process.cwd();
   if (!process.env.PORT && !process.env.ORIGIN) {
     process.env.PORT = '1290';
     process.env.ORIGIN = `http://localhost:${process.env.PORT}`;

@@ -1,0 +1,27 @@
+body {
+  background-color: #fbfbfd;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  line-height: 1.4;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
+:root {
+  --c-primary: #8c3acf;
+  --c-primary-hover: #b74aca;
+  --c-secondary: #25cdeb;
+  --c-secondary-hover: #27a8be;
+  --c-third: #c7e0de;
+  --c-fourth: #222621;
+  --c-fifth: #384033;
+
+  --c-white: #ffffff;
+  --c-neutral: #f1f2f3;
+  --c-black: #202020;
+  --c-black-light: #474747;
+}

@@ -95,39 +95,42 @@ export class Build {
     {
       const rootPath = path.join(process.env.PROJECT_ROOT, '/src/pages');
       const fileTree = await FSUtil.fileTree(rootPath);
-      const pages: Page[] = PageFactory.fromFileTree(fileTree).map(e => {
-        e.type = PageType.STATIC;
-        return e;
-      });
-      Build.progress.static.page.count = pages.length;
-      for (const i in pages) {
-        const page = pages[i];
-        const rollup = StaticContent.rollup.find(r => r.id === page.name);
-        if (rollup) {
-          const builtPages = await Builder.createPages(
-            page,
-            rollup.css,
-            rollup.js,
-          );
-          Build.pageCount = Build.pageCount + builtPages.length;
-          builtPages.forEach(bp => {
-            Build.compiledPages.push(bp);
-          });
-          Build.logger.info(
-            '',
-            `Build done in ${(Date.now() - Build.progress.time.offset) /
-              1000}s for '${page.name}'`,
-          );
-          Build.progress.static.page.done = Build.progress.static.page.done + 1;
-          Build.progress.static.stats.push({
-            name: page.name,
-            timeDelta: Date.now() - Build.progress.time.offset,
-          });
-        } else {
-          Build.logger.error(
-            '',
-            `Rollup for page '${page.name}' does not exist`,
-          );
+      if (fileTree.length > 0) {
+        const pages: Page[] = PageFactory.fromFileTree(fileTree).map(e => {
+          e.type = PageType.STATIC;
+          return e;
+        });
+        Build.progress.static.page.count = pages.length;
+        for (const i in pages) {
+          const page = pages[i];
+          const rollup = StaticContent.rollup.find(r => r.id === page.name);
+          if (rollup) {
+            const builtPages = await Builder.createPages(
+              page,
+              rollup.css,
+              rollup.js,
+            );
+            Build.pageCount = Build.pageCount + builtPages.length;
+            builtPages.forEach(bp => {
+              Build.compiledPages.push(bp);
+            });
+            Build.logger.info(
+              '',
+              `Build done in ${(Date.now() - Build.progress.time.offset) /
+                1000}s for '${page.name}'`,
+            );
+            Build.progress.static.page.done =
+              Build.progress.static.page.done + 1;
+            Build.progress.static.stats.push({
+              name: page.name,
+              timeDelta: Date.now() - Build.progress.time.offset,
+            });
+          } else {
+            Build.logger.error(
+              '',
+              `Rollup for page '${page.name}' does not exist`,
+            );
+          }
         }
       }
     }
@@ -135,41 +138,43 @@ export class Build {
     {
       const rootPath = path.join(process.env.PROJECT_ROOT, '/src/templates');
       const fileTree = await FSUtil.fileTree(rootPath);
-      const pages: Page[] = PageFactory.fromFileTree(fileTree).map(e => {
-        e.type = PageType.TEMPLATE;
-        return e;
-      });
-      Build.progress.template.page.count = pages.length;
-      for (const i in pages) {
-        const page = pages[i];
-        const rollup = StaticContent.rollup.find(r => r.id === page.name);
-        if (rollup) {
-          page.location.path = 'none';
-          const builtPages = await Builder.createPages(
-            page,
-            rollup.css,
-            rollup.js,
-          );
-          Build.pageCount = Build.pageCount + builtPages.length;
-          builtPages.forEach(bp => {
-            Build.compiledPages.push(bp);
-          });
-          Build.logger.info(
-            '',
-            `Build done in ${(Date.now() - Build.progress.time.offset) /
-              1000}s for '${page.name}'`,
-          );
-          Build.progress.template.page.done =
-            Build.progress.template.page.done + 1;
-          Build.progress.template.stats.push({
-            name: page.name,
-            timeDelta: Date.now() - Build.progress.time.offset,
-          });
-        } else {
-          Build.logger.error(
-            '',
-            `Rollup for page '${page.name}' does not exist`,
-          );
+      if (fileTree.length > 0) {
+        const pages: Page[] = PageFactory.fromFileTree(fileTree).map(e => {
+          e.type = PageType.TEMPLATE;
+          return e;
+        });
+        Build.progress.template.page.count = pages.length;
+        for (const i in pages) {
+          const page = pages[i];
+          const rollup = StaticContent.rollup.find(r => r.id === page.name);
+          if (rollup) {
+            page.location.path = 'none';
+            const builtPages = await Builder.createPages(
+              page,
+              rollup.css,
+              rollup.js,
+            );
+            Build.pageCount = Build.pageCount + builtPages.length;
+            builtPages.forEach(bp => {
+              Build.compiledPages.push(bp);
+            });
+            Build.logger.info(
+              '',
+              `Build done in ${(Date.now() - Build.progress.time.offset) /
+                1000}s for '${page.name}'`,
+            );
+            Build.progress.template.page.done =
+              Build.progress.template.page.done + 1;
+            Build.progress.template.stats.push({
+              name: page.name,
+              timeDelta: Date.now() - Build.progress.time.offset,
+            });
+          } else {
+            Build.logger.error(
+              '',
+              `Rollup for page '${page.name}' does not exist`,
+            );
+          }
         }
       }
     }

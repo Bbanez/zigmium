@@ -82,7 +82,7 @@ export class App {
   private async initializeControllers(controllers: any[]) {
     if (process.env.STATE === 'DEV') {
       this.app.use(
-        express.static(path.join(process.env.PROJECT_ROOT, '/public')),
+        express.static(path.join(process.env.PROJECT_ROOT, '/static')),
       );
     } else {
       this.app.use(
