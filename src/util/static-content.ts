@@ -17,18 +17,53 @@ export class StaticContent {
   private static logger: Logger = new Logger('StaticContent');
 
   public static async init() {
-    StaticContent.SeoMeta = (await FSUtil.read('/src/assets/seoMeta.html'))
-      .toString()
-      .replace(/\n/g, '')
-      .replace(/\r/g, '')
-      .replace(/\t/g, '')
-      .replace(/  /g, '');
-    StaticContent.IndexTemplate = (await FSUtil.read('/src/assets/index.html'))
-      .toString()
-      .replace(/\n/g, '')
-      .replace(/\r/g, '')
-      .replace(/\t/g, '')
-      .replace(/  /g, '');
+    try {
+      StaticContent.SeoMeta = (await FSUtil.read('/src/assets/seoMeta.html'))
+        .toString()
+        .replace(/\n/g, '')
+        .replace(/\r/g, '')
+        .replace(/\t/g, '')
+        .replace(/  /g, '');
+    } catch (error) {
+      StaticContent.SeoMeta = '';
+    }
+    try {
+      StaticContent.IndexTemplate = (
+        await FSUtil.read('/src/assets/index.html')
+      )
+        .toString()
+        .replace(/\n/g, '')
+        .replace(/\r/g, '')
+        .replace(/\t/g, '')
+        .replace(/  /g, '');
+    } catch (error) {
+      StaticContent.IndexTemplate = `
+      <!doctype html>
+      <html lang="en">
+
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+        <title>__pageTitle__</title>
+
+        {{__seoMeta__}}
+      </head>
+
+      <body>
+        <div id="root">
+          <script>{{__script__}}</script>
+        </div>
+      </body>
+
+      </html>
+      `
+        .replace(/\n/g, '')
+        .replace(/\r/g, '')
+        .replace(/\t/g, '')
+        .replace(/  /g, '');
+    }
     const rollupOffset = Date.now();
     StaticContent.logger.info('', 'Start building rollup...');
     StaticContent.Rollup = [];
