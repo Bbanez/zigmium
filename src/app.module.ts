@@ -80,9 +80,15 @@ export class App {
   }
 
   private async initializeControllers(controllers: any[]) {
-    this.app.use(
-      express.static(path.join(process.env.PROJECT_ROOT, '/public')),
-    );
+    if (process.env.STATE === 'DEV') {
+      this.app.use(
+        express.static(path.join(process.env.PROJECT_ROOT, '/public')),
+      );
+    } else {
+      this.app.use(
+        express.static(path.join(process.env.PROJECT_ROOT, '/public')),
+      );
+    }
     controllers.forEach(controller => {
       this.app.use(controller.baseUri, controller.router);
       this.logger.info('.controller', `[${controller.name}] mapping done.`);
@@ -96,9 +102,19 @@ export class App {
       this.app.use(
         '/',
         (request: express.Request, response: express.Response) => {
-          response.status(404);
-          response.send(`Page not found - This is 404 page for development.`);
-          response.end();
+          const page = PageServeMiddleware.pages.find(
+            p => '/404/index.html' === p.location.path,
+          );
+          if (page) {
+            response.status(404);
+            response.setHeader('Content-Type', 'text/html');
+            response.send(page.html.src);
+            response.end();
+          } else {
+            response.status(404);
+            response.send(`Page not found - This is 404 page for development.`);
+            response.end();
+          }
         },
       );
     } else {

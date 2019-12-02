@@ -9,9 +9,11 @@ function parseArgsIntoOptions(rawArgs) {
       '--dev': Boolean,
       '--serve': Boolean,
       '--build': Boolean,
+      '--init': Boolean,
       '-d': '--dev',
       '-s': '--serve',
       '-b': '--build',
+      '-i': '--init',
     },
     {
       argv: rawArgs.slice(2),
@@ -21,6 +23,7 @@ function parseArgsIntoOptions(rawArgs) {
     dev: args['--dev'] || false,
     serve: args['--serve'] || false,
     build: args['--build'] || false,
+    init: args['--init'] || false,
   };
 }
 
