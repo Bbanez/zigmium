@@ -1,7 +1,7 @@
 import * as arg from 'arg';
 import * as path from 'path';
 
-const rootPath = 'purple-lightning';
+const rootPath = 'zigmium';
 
 function parseArgsIntoOptions(rawArgs) {
   const args = arg(
