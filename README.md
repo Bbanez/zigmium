@@ -1,4 +1,4 @@
-# Purple Lightning
+# Zigmium
 
 ![Logo](https://i.imgur.com/3xXqhtN.png)
 
@@ -35,4 +35,4 @@ With this in mind project was started and results were very interesting which is
 
 ## How to use
 
-Please visit [starter project](https://github.com/Bbanez/purple-lightning-started).
+[Setup zigmium project in minutes with Zigmium CLI.](https://github.com/Bbanez/zigmium-cli).
