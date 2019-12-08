@@ -1,4 +1,6 @@
 import * as arg from 'arg';
+import * as path from 'path';
+import * as fs from 'fs';
 
 const rootPath = 'zigmium';
 
@@ -39,7 +41,74 @@ export function cli(args) {
   } else {
     process.env.STATE = 'BUILD';
   }
-  if (options.dev || options.serve) {
+  if (options.dev) {
+    const App = require(`${rootPath}/app.module.js`);
+    const app = new App.App();
+    app.listen();
+    const { StaticContent } = require(`${rootPath}/util/static-content.js`);
+    const { Build } = require(`${rootPath}/build.js`);
+    StaticContent.init().then(async () => {
+      try {
+        await Build.process();
+        Build.progressTimer = setInterval(Build.checkProgress, 10);
+      } catch (error) {
+        Build.logger.error('', error);
+        clearInterval(Build.progressTimer);
+      }
+    });
+    let startWatching: boolean = false;
+    setTimeout(() => {
+      startWatching = true;
+    }, 1000);
+    const chokidar = require('chokidar');
+    const watcher = chokidar.watch(path.join(process.env.PROJECT_ROOT, 'src'), {
+      ignored: /^\./,
+      persistent: true,
+    });
+    watcher
+      .on('add', location => {
+        if (startWatching === true) {
+          StaticContent.init().then(async () => {
+            try {
+              await Build.process();
+              Build.progressTimer = setInterval(Build.checkProgress, 10);
+            } catch (error) {
+              Build.logger.error('', error);
+              clearInterval(Build.progressTimer);
+            }
+          });
+        }
+      })
+      .on('change', location => {
+        if (startWatching === true) {
+          StaticContent.init().then(async () => {
+            try {
+              await Build.process();
+              Build.progressTimer = setInterval(Build.checkProgress, 10);
+            } catch (error) {
+              Build.logger.error('', error);
+              clearInterval(Build.progressTimer);
+            }
+          });
+        }
+      })
+      .on('unlink', location => {
+        if (startWatching === true) {
+          StaticContent.init().then(async () => {
+            try {
+              await Build.process();
+              Build.progressTimer = setInterval(Build.checkProgress, 10);
+            } catch (error) {
+              Build.logger.error('', error);
+              clearInterval(Build.progressTimer);
+            }
+          });
+        }
+      })
+      .on('error', error => {
+        console.error('Error happened', error);
+      });
+  } else if (options.serve) {
     const App = require(`${rootPath}/app.module.js`);
     const app = new App.App();
     app.listen();

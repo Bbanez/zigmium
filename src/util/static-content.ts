@@ -136,4 +136,44 @@ export class StaticContent {
   }> {
     return JSON.parse(JSON.stringify(StaticContent.Rollup));
   }
+
+  public static async rollupUpdatePage(page: Page) {
+    StaticContent.logger.info(
+      '.rollupUpdatePage',
+      `Updating Rollup for page '${page.name}'...`,
+    );
+    const rollupResult = await Rollup.build({
+      input: path.join(
+        page.type === PageType.STATIC ? 'src/pages' : 'src/template',
+        page.location.path.replace('.html', '.js'),
+      ),
+      output: 'scripts/assets',
+    });
+    const rollup = StaticContent.Rollup.find(e => e.id === page.name);
+    if (rollup) {
+      StaticContent.logger.info(
+        '.rollupUpdatePage',
+        'Page does not exist, UPDATING.',
+      );
+      StaticContent.Rollup.forEach(e => {
+        if (e.id === page.name) {
+          e = {
+            id: page.name,
+            js: rollupResult.js,
+            css: rollupResult.css,
+          };
+        }
+      });
+    } else {
+      StaticContent.logger.info(
+        '.rollupUpdatePage',
+        'Page does not exist, PUSHING.',
+      );
+      StaticContent.Rollup.push({
+        id: page.name,
+        js: rollupResult.js,
+        css: rollupResult.css,
+      });
+    }
+  }
 }
