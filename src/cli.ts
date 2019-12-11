@@ -106,12 +106,9 @@ export function cli(args) {
         }
       })
       .on('error', error => {
+        // tslint:disable-next-line:no-console
         console.error('Error happened', error);
       });
-  } else if (options.serve) {
-    const App = require(`${rootPath}/app.module.js`);
-    const app = new App.App();
-    app.listen();
   } else {
     const { StaticContent } = require(`${rootPath}/util/static-content.js`);
     const { Build } = require(`${rootPath}/build.js`);
@@ -124,5 +121,8 @@ export function cli(args) {
         clearInterval(Build.progressTimer);
       }
     });
+    const App = require(`${rootPath}/app.module.js`);
+    const app = new App.App();
+    app.listen();
   }
 }

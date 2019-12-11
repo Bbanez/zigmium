@@ -38,10 +38,6 @@ export class AppController {
               __type: 'number',
               __required: true,
             },
-            page: {
-              __type: 'string',
-              __required: true,
-            },
             signature: {
               __type: 'string',
               __required: true,

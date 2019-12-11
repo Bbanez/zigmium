@@ -17,16 +17,6 @@ import { FSUtil } from './util';
 import { Page } from './models/page.model';
 import { PageServeMiddleware } from './middleware/page-serve.middleware';
 
-// StaticContent.init().then(async () => {
-//   try {
-//     await Build.process();
-//     Build.progressTimer = setInterval(Build.checkProgress, 10);
-//   } catch (error) {
-//     Build.logger.error('', error);
-//     clearInterval(Build.progressTimer);
-//   }
-// });
-
 @Application({
   port: parseInt(process.env.PORT, 10),
   controllers: [new AppController()],
